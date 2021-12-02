@@ -12,11 +12,10 @@ sslify = SSLify(app)
 def page(url):
     domain = request.headers['Host'].split(":")[0]
     file = f"{websites}/{domain}/{url}"
-    dirname = path.dirname(file)
-    if path.isfile(file):
-        return send_from_directory(dirname, path.basename(file))
     if path.isfile(file+"index.html"):
-        return send_from_directory(dirname, "index.html")
+        return send_from_directory(path.dirname(file), "index.html")
+    if path.isfile(file):
+        return send_from_directory(path.dirname(file), path.basename(file))
     if path.isdir(file) and file[-1] != "/":
         return redirect(f"/{url}/", 301)
     return abort(404, description=domain)
