@@ -11,15 +11,14 @@ sslify = SSLify(app)
 @app.get('/<path:url>')
 def page(url):
     domain = request.headers['Host'].split(":")[0]
-    files = {
-        f"{websites}/{domain}/{url}": url,
-        f"{websites}/{domain}/{url}index.html": "index.html",
-    }
-    for location, file in files.items():
-        if path.isfile(location):
-            return send_from_directory(f"{websites}/{domain}/", file)
-        if path.isdir(location) and file[-1] != "/":
-            return redirect(f"/{url}/", 301)
+    file = f"{websites}/{domain}/{url}"
+    dirname = path.dirname(file)
+    if path.isfile(file):
+        return send_from_directory(dirname, path.basename(file))
+    if path.isfile(file+"index.html"):
+        return send_from_directory(dirname, "index.html")
+    if path.isdir(file) and file[-1] != "/":
+        return redirect(f"/{url}/", 301)
     return abort(404, description=domain)
 
 
@@ -27,4 +26,4 @@ def page(url):
 def page_not_found(e):
     if path.isfile(f"{websites}/{e.description}/404.html"):
         return send_from_directory(f"{websites}/{e.description}", "404.html"), 404
-    return "add 404.html", 404
+    return "404", 404
