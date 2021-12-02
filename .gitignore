@@ -1,4 +1,6 @@
-.vscode
+# cert/
+# websites/
+.vscode/
 .idea
 venv/
 # Byte-compiled / optimized / DLL files
