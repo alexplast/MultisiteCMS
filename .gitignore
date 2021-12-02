@@ -1,5 +1,5 @@
-# cert/
-# websites/
+cert/
+websites/
 .vscode/
 .idea
 venv/
